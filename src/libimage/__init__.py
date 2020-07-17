@@ -52,5 +52,5 @@ def _save(name):
     import skimage.io
     rgb = skimage.io.imread(f'{name}-2048.png')
     filename = os.path.join(__root__, f"{name}.lzma.p")
-    with lzma.open(filename, "wb") as f:
+    with lzma.open(filename, "wb", preset=9) as f:
         pickle.dump(rgb, f)
