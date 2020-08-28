@@ -1,0 +1,3 @@
+include LICENSE
+graft src/libimage
+global-exclude *.py[co]
