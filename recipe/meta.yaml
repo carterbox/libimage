@@ -1,4 +1,4 @@
-{% set version = "0.0.0" %}
+{% set version = "0.0.3" %}
 
 package:
   name: libimage
@@ -14,12 +14,12 @@ build:
   script: python -m pip install --no-deps --ignore-installed .
 
 requirements:
-  host:
+  build:
     - python
     - pip
-  build:
     - setuptools_scm_git_archive
   run:
+    - numpy
     - python >=3.6
 
 test:
