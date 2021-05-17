@@ -21,6 +21,7 @@ available_images = [
     'bombus',
     'coins',
     'cryptomeria',
+    'earring',
     'satyre',
 ]
 
