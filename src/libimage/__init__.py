@@ -24,10 +24,18 @@ available_images = [
     'satyre',
 ]
 
+
 def _downsample(rgb, size):
-    """Shrink the 2048 x 2048 rgb image to size  x size by averaging pixels."""
-    rgb = rgb.reshape(size, 2048 // size, size, 2048 // size, 3)
+    """Shrink the rgb image to size x size by averaging pixels."""
+    rgb = rgb.reshape(
+        size,
+        rgb.shape[0] // size,
+        size,
+        rgb.shape[1] // size,
+        3,
+    )
     return np.mean(rgb, axis=(1, 3))
+
 
 def load(name, size=2048, color=False):
     """Return an image from the library by name.
@@ -44,20 +52,21 @@ def load(name, size=2048, color=False):
     warnings.warn("Using images from this library requires attribution to "
                   "their original creators. See the module docs for citation "
                   "details.")
-    if size > 2048 or 2048 % size != 0:
-        raise ValueError('size can only be powers of 2 <= 2048.')
     filename = os.path.join(__root__, f"{name}.lzma.p")
     with lzma.open(filename, "rb") as f:
         rgb = pickle.load(f) / 255
+    if size > rgb.shape[0] or rgb.shape[0] % size != 0:
+        raise ValueError(f'size can only be powers of 2 <= {rgb.shape[0]}.')
     rgb = _downsample(rgb, size)
     if color:
         return rgb
-    return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
+    return np.dot(rgb[..., :3], [0.2989, 0.5870, 0.1140])
+
 
 def _save(name):
     """Convert an RGB PNG to LZMA compressed pickle."""
     import skimage.io
-    rgb = skimage.io.imread(f'{name}-2048.png')
+    rgb = skimage.io.imread(f'{name}.png')
     filename = os.path.join(__root__, f"{name}.lzma.p")
     with lzma.open(filename, "wb", preset=9) as f:
         pickle.dump(rgb, f)
