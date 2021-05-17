@@ -17,6 +17,13 @@ import numpy as np
 
 __root__ = os.path.dirname(__file__)
 
+available_images = [
+    'bombus',
+    'coins',
+    'cryptomeria',
+    'satyre',
+]
+
 def _downsample(rgb, size):
     """Shrink the 2048 x 2048 rgb image to size  x size by averaging pixels."""
     rgb = rgb.reshape(size, 2048 // size, size, 2048 // size, 3)
